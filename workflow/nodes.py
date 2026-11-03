@@ -3,6 +3,8 @@ from workflow.llm import llm
 from langchain_core.messages import SystemMessage, HumanMessage
 import json
 
+from langgraph.types import interrupt
+
 def search_node(state: WorkflowState):
     query = state["query"]
     mock_results = [
@@ -34,3 +36,18 @@ def report_node(state: WorkflowState):
         HumanMessage(content=f"分析结论：\n{state['analysis']}"),
     ])
     return {"report_draft": response.content}
+
+def approval_node(state: WorkflowState):
+    decision = interrupt({
+        "question": "请审阅报告草稿，选择：approve / reject / edit",
+        "report_draft": state["report_draft"],
+        "analysis_excerpt": state["analysis"][:300],
+    })
+
+    if decision.get("action") == "edit":
+        return {
+            "approval_decision": "edit",
+            "edited_report": decision.get("edited_content", state["report_draft"]),
+        }
+
+    return {"approval_decision": decision.get("action", "reject")}

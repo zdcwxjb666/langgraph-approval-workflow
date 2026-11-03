@@ -1,8 +1,8 @@
-import os
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-
 load_dotenv()
+
+import os
+from langchain_openai import ChatOpenAI
 
 llm = ChatOpenAI(
     model="deepseek-flash",
