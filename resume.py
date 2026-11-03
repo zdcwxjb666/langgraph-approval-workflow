@@ -4,7 +4,7 @@ load_dotenv()
 from langgraph.types import Command
 from workflow.graph import graph
 
-config = {"configurable": {"thread_id": "demo-thread-003"}}
+config = {"configurable": {"thread_id": "demo-thread-006"}}
 
 result = graph.invoke(
     Command(resume={"action": "approve"}),
